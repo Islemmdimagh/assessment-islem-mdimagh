@@ -11,26 +11,26 @@ public class QueryBuilder {
     private List<Join> joins = new ArrayList<>();
     private List<Filter> filters = new ArrayList<>();
   
-    public QueryBuilder select(Field... fields) {
+    public Query select(Field... fields) {
         for (Field field : fields) {
             selectFields.add(field);
         }
-        return this;
+        return new Query(this);
     }
   
-    public QueryBuilder from(Table table) {
+    public Query from(Table table) {
         this.fromTable = table;
-        return this;
+        return new Query(this);
     }
   
-    public QueryBuilder join(Table table, Condition condition) {
+    public Query join(Table table, Condition condition) {
         joins.add(new Join(table, condition));
-        return this;
+        return new Query(this);
     }
   
-    public QueryBuilder filter(Condition condition) {
+    public Query filter(Condition condition) {
         filters.add(new Filter(condition));
-        return this;
+        return new Query(this);
     }
   
     public Query build() {
@@ -54,7 +54,7 @@ public class QueryBuilder {
     }
   
     public static Condition and(Condition condition1, Condition condition2) {
-      return new SimpleCondition("(" + condition1.toString() + " AND " + condition2.toString() + ")");
+        return new SimpleCondition("(" + condition1.toString() + " AND " + condition2.toString() + ")");
     }
   
     public static Condition or(Condition condition1, Condition condition2) {
@@ -62,13 +62,13 @@ public class QueryBuilder {
     }
     
     public static Condition or(Condition condition1, Condition condition2, Condition condition3) {
-        return new SimpleCondition("(" + condition1.toString() + " OR " + condition2.toString() + " OR " + condition3.toString() + ")");
+    return new SimpleCondition("(" + condition1.toString() + " OR " + condition2.toString() + " OR " + condition3.toString() + ")");
     }
-  
+
     public static Condition eq(Field field1, Field field2) {
-      return new SimpleCondition(field1.getTable().getName() + "." + field1.getName() + " = " + field2.getTable().getName() + "." + field2.getName());
+        return new SimpleCondition(field1.getTable().getName() + "." + field1.getName() + " = " + field2.getTable().getName() + "." + field2.getName());
     }
-  
+
     public static Condition eq(Field field, String value) {
       return new SimpleCondition(field.getTable().getName() + "." + field.getName() + " = '" + value + "'");
     }
@@ -76,11 +76,11 @@ public class QueryBuilder {
     public static Condition eq(Field field, int value) {
       return new SimpleCondition(field.getTable().getName() + "." + field.getName() + " = " + value);
     }
-  
+
     public static Condition gt(Field field, int value) {
         return new SimpleCondition(field.getTable().getName() + "." + field.getName() + " > " + value);
     }
-  
+
     public static Condition like(Field field, String pattern) {
         return new SimpleCondition(field.getTable().getName() + "." + field.getName() + " LIKE '" + pattern + "'");
     }
@@ -88,11 +88,11 @@ public class QueryBuilder {
     public static class Field {
         private final String name;
         private final Table table;
-  
+          
         public Field(Table table, String name) {
             this.name = name;
             this.table = table;
-        }
+                    }
   
         public String getName() {
             return name;
@@ -106,16 +106,16 @@ public class QueryBuilder {
     public static class Table {
         private final String name;
         private final String alias;
-  
+          
         public Table(String name) {
             this.name = name;
             this.alias = null;
-        }
+                    }
   
         public Table(String name, String alias) {
             this.name = name;
             this.alias = alias;
-        }
+                    }
   
         public String getName() {
             return name;

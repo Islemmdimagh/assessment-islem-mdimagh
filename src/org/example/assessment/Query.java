@@ -1,5 +1,7 @@
 package org.example.assessment;
 
+import org.example.assessment.QueryBuilder.Table;
+import org.example.assessment.QueryBuilder.Field;
 
 public class Query {
 
@@ -7,6 +9,26 @@ public class Query {
   
     public Query(QueryBuilder queryBuilder) {
         this.queryBuilder = queryBuilder;
+    }
+
+    public Query select(Field... fields) {
+        queryBuilder.select(fields);
+        return this;
+    }
+  
+    public Query from(Table table) {
+        queryBuilder.from(table);
+        return this;
+    }
+  
+    public Query join(Table table, Condition condition) {
+        queryBuilder.join(table, condition);
+        return this;
+    }
+  
+    public Query filter(Condition condition) {
+        queryBuilder.filter(condition);
+        return this;
     }
   
     public String build() {
