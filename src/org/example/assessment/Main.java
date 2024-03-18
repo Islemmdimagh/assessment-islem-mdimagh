@@ -10,7 +10,7 @@ public class Main {
     Table users = new Table("users");
     Table comments = new Table("comments", "comment_alias");
 
-    Query query = new Query(
+    Query query = (
         queryBuilder
             .select(
                 users.field("id"),
